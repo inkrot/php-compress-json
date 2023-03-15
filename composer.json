@@ -1,0 +1,32 @@
+{
+    "name": "inkrot/php-compress-json",
+    "type": "library",
+    "description": "Store JSON data in space efficient manner",
+    "keywords": ["json", "compress"],
+    "homepage": "http://github.com/inkrot/php-compress-json",
+    "license": "BSD-2-Clause",
+    "authors": [
+        {"name": "Islam Zaripov", "email": "islam.zar@yandex.ru"}
+    ],
+    "autoload": {
+        "psr-4": {
+            "CompressJson\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CompressJsonTest\\": "tests/CompressJsonTest"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "^8.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.1",
+        "phpstan/phpstan": "^1.10",
+        "phpstan/phpstan-strict-rules": "^1.5"
+    }
+}

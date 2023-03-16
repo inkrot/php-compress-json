@@ -30,10 +30,10 @@ class Compressor
     }
 
     /**
-     * @param string|array|bool|int|null|float $data
+     * @param object|string|array|bool|int|null|float $data
      * @throws UnsupportedDataTypeException
      */
-    function compress(string|array|bool|int|null|float $data): Compressed
+    function compress(object|string|array|bool|int|null|float $data): Compressed
     {
         $root = $this->memory->addValue($data, null);
         $values = $this->memory->memToStringValues();

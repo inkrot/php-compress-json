@@ -72,7 +72,7 @@ abstract class AbstractMemory
     }
 
     /**
-     * @param $data array|object|null
+     * @param $data object|string|array|bool|int|null|float
      * @param $parent array|object|null
      * @return ValueType
      * @throws UnsupportedDataTypeException
@@ -80,9 +80,6 @@ abstract class AbstractMemory
     public function addValue(mixed $data, mixed $parent): string
     {
         if ($data === null) {
-            if (is_array($parent)) {
-                $this->addValue(null, $parent);
-            }
             return '';
         }
         else if (is_object($data) || Utils::isAssocArray($data)) {

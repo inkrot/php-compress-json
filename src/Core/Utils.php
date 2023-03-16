@@ -17,9 +17,10 @@ class Utils
 
     public static function reverseStr(string $s): string
     {
-        return implode('', array_reverse(
-            explode('', $s)
-        ));
+        $arr = array_reverse(
+            str_split($s)
+        );
+        return implode('', $arr);
     }
 
     public static function explodeStrToRequiredPositions(string $separator, string $strNum, int $count): array {

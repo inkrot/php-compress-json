@@ -17,7 +17,7 @@ class JsonObject
      * @param ValueType[] $values
      * @throws UnsupportedDataTypeException
      */
-    public static function decode(array $values, string $key)
+    public static function decodeValues(array $values, string $key)
     {
         if ($key === '' || $key === '_') {
             return null;
@@ -27,12 +27,12 @@ class JsonObject
         if ($value === null) {
             return null;
         }
-        $value = (string) $value;
-        if (is_numeric($value)) {
+        //$value = (string) $value;
+        if ($value->isNumeric()) {
             return $value;
         }
-        else if (is_string($value)) {
-            $prefix = $value[0] . $value[1];
+        else if ($value->isString()) {
+            $prefix = $value->getStringPrefix();
             switch ($prefix) {
                 case 'b|':
                     return JsonBoolean::decodeBoolean($value);
@@ -63,7 +63,7 @@ class JsonObject
         $o = [];
         $vs = explode('|', $s);
         $keyId = $vs[1];
-        $keys = JsonObject::decode($values, $keyId);
+        $keys = JsonObject::decodeValues($values, $keyId);
         $n = count($vs);
         if ($n - 2 === 1 && !is_array($keys)) {
             // single-key object using existing value as key
@@ -72,7 +72,7 @@ class JsonObject
         for ($i = 2; $i < $n; $i++) {
             $k = $keys[$i - 2];
             $v = $vs[$i];
-            $v = JsonObject::decode($values, $v);
+            $v = JsonObject::decodeValues($values, $v);
             $o[$k] = $v;
         }
         return $o;

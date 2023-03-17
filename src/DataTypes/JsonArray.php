@@ -19,7 +19,7 @@ class JsonArray
         $xs = [];
         for ($i = 0; $i < $n; $i++) {
             $v = $vs[$i + 1];
-            $v = JsonObject::decode($values, $v);
+            $v = JsonObject::decodeValues($values, $v);
             $xs[] = $v; //$xs[$i] = $v;
         }
         return $xs;

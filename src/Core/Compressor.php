@@ -51,7 +51,7 @@ class Compressor
             $compressed->getValues()
         );
         $root = $compressed->getKey();
-        return JsonObject::decode($values, $root);
+        return JsonObject::decodeValues($values, $root);
     }
 
     /**

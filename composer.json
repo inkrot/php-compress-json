@@ -8,6 +8,9 @@
     "authors": [
         {"name": "Islam Zaripov", "email": "islam.zar@yandex.ru"}
     ],
+    "scripts": {
+        "tests": "vendor/bin/phpunit"
+    },
     "autoload": {
         "psr-4": {
             "CompressJson\\": "src/"

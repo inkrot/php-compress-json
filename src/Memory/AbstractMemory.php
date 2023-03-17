@@ -3,7 +3,7 @@
 namespace CompressJson\Memory;
 
 use CompressJson\Core\Utils;
-use CompressJson\Core\ValueType;
+use CompressJson\Core\Value;
 use CompressJson\DataTypes\JsonBoolean;
 use CompressJson\DataTypes\JsonNumber;
 use CompressJson\DataTypes\JsonString;
@@ -42,7 +42,7 @@ abstract class AbstractMemory
         );
     }
 
-    public function getValueKey(ValueType $value): string
+    public function getValueKey(Value $value): string
     {
         if ($this->cache->hasValue($value)) {
             return $this->cache->getValue($value);
@@ -50,14 +50,14 @@ abstract class AbstractMemory
         $id = $this->getNextKeyCount();
         $key = JsonNumber::num_to_s($id);
         $this->store->add($value);
-        $this->cache->setValue($value, new ValueType($key));
+        $this->cache->setValue($value, new Value($key));
         return $key;
     }
 
     /**
      * @param $keys string[]
      */
-    public function getSchema(array $keys): ValueType
+    public function getSchema(array $keys): Value
     {
         /*if (config.sort_key) {
           keys.sort()
@@ -66,7 +66,7 @@ abstract class AbstractMemory
         if ($this->cache->hasSchema($schema)) {
             return $this->cache->getSchema($schema);
         }
-        $keyId = new ValueType($this->addValue($keys, null));
+        $keyId = new Value($this->addValue($keys, null));
         $this->cache->setSchema($schema, $keyId);
         return $keyId;
     }
@@ -74,7 +74,7 @@ abstract class AbstractMemory
     /**
      * @param $data object|string|array|bool|int|null|float
      * @param $parent array|object|null
-     * @return ValueType
+     * @return Value
      * @throws UnsupportedDataTypeException
      */
     public function addValue(mixed $data, mixed $parent): string
@@ -90,7 +90,7 @@ abstract class AbstractMemory
             $keys = array_keys($dataArray);
             if (count($keys) === 0) {
                 return $this->getValueKey(
-                    new ValueType('o|')
+                    new Value('o|')
                 );
             }
             $acc = 'o';
@@ -102,7 +102,7 @@ abstract class AbstractMemory
                 $acc .= '|' . $v;
             }
             return $this->getValueKey(
-                new ValueType($acc)
+                new Value($acc)
             );
         }
         else if (is_array($data)) {
@@ -115,26 +115,26 @@ abstract class AbstractMemory
                 $acc = 'a|';
             }
             return $this->getValueKey(
-                new ValueType($acc)
+                new Value($acc)
             );
         }
         else if (is_bool($data)) {
             return $this->getValueKey(
-                new ValueType(
+                new Value(
                     JsonBoolean::encodeBoolean($data)
                 )
             );
         }
         else if (is_string($data)) {
             return $this->getValueKey(
-                new ValueType(
+                new Value(
                     JsonString::encodeString($data)
                 )
             );
         }
         else if (is_numeric($data)) {
             return $this->getValueKey(
-                new ValueType(
+                new Value(
                     JsonNumber::encodeNumber($data)
                 )
             );

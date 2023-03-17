@@ -2,7 +2,7 @@
 
 namespace CompressJson\Memory;
 
-use CompressJson\Core\ValueType;
+use CompressJson\Core\Value;
 
 class InMemoryCache implements CacheInterface
 {
@@ -19,22 +19,22 @@ class InMemoryCache implements CacheInterface
         return array_key_exists($key, $this->schemaMem);
     }
 
-    function getValue(string $key): ?ValueType
+    function getValue(string $key): ?Value
     {
-        return new ValueType($this->valueMem[$key]);
+        return new Value($this->valueMem[$key]);
     }
 
-    function getSchema(string $key): ?ValueType
+    function getSchema(string $key): ?Value
     {
-        return new ValueType($this->schemaMem[$key]);
+        return new Value($this->schemaMem[$key]);
     }
 
-    function setValue(string $key, ?ValueType $value): void
+    function setValue(string $key, ?Value $value): void
     {
         $this->valueMem[$key] = $value;
     }
 
-    function setSchema(string $key, ?ValueType $value): void
+    function setSchema(string $key, ?Value $value): void
     {
         $this->schemaMem[$key] = $value;
     }

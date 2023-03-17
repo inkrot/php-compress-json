@@ -2,7 +2,7 @@
 
 namespace CompressJson\DataTypes;
 
-use CompressJson\Core\ValueType;
+use CompressJson\Core\Value;
 use CompressJson\Exception\UnsupportedDataTypeException;
 
 class JsonObject
@@ -14,43 +14,21 @@ class JsonObject
     }
 
     /**
-     * @param ValueType[] $values
+     * @param Value[] $values
      * @throws UnsupportedDataTypeException
      */
-    public static function decodeValues(array $values, string $key)
+    public static function decodeValues(array $values, string $key): mixed
     {
         if ($key === '' || $key === '_') {
             return null;
         }
         $id = self::decodeKey($key);
         $value = $values[$id];
-        if ($value === null) {
-            return null;
-        }
-        //$value = (string) $value;
-        if ($value->isNumeric()) {
-            return $value;
-        }
-        else if ($value->isString()) {
-            $prefix = $value->getStringPrefix();
-            switch ($prefix) {
-                case 'b|':
-                    return JsonBoolean::decodeBoolean($value);
-                case 'o|':
-                    return JsonObject::decodeObject($values, $value);
-                case 'n|':
-                    return JsonNumber::decodeNumber($value);
-                case 'a|':
-                    return JsonArray::decodeArray($values, $value);
-                default:
-                    return JsonString::decodeString($value);
-            }
-        }
-        throw new UnsupportedDataTypeException($value);
+        return $value->decode($values);
     }
 
     /**
-     * @param ValueType[] $values
+     * @param Value[] $values
      * @param string $s
      * @return array
      * @throws UnsupportedDataTypeException

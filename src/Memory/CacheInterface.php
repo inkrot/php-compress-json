@@ -2,18 +2,18 @@
 
 namespace CompressJson\Memory;
 
-use CompressJson\Core\ValueType;
+use CompressJson\Core\Value;
 
 interface CacheInterface
 {
     function hasValue(string $key): bool;
     function hasSchema(string $key): bool;
 
-    function getValue(string $key): ?ValueType;
-    function getSchema(string $key): ?ValueType;
+    function getValue(string $key): ?Value;
+    function getSchema(string $key): ?Value;
 
-    function setValue(string $key, ?ValueType $value): void;
-    function setSchema(string $key, ?ValueType $value): void;
+    function setValue(string $key, ?Value $value): void;
+    function setSchema(string $key, ?Value $value): void;
 
     // Type: (key: Key, value: any) => void | 'break'
     function forEachValue(callable $callback): void;

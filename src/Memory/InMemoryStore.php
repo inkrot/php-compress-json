@@ -2,14 +2,14 @@
 
 namespace CompressJson\Memory;
 
-use CompressJson\Core\ValueType;
+use CompressJson\Core\Value;
 
 class InMemoryStore implements StoreInterface
 {
-    /** @var ValueType[] */
+    /** @var Value[] */
     private array $mem = [];
 
-    function add(ValueType $value): void
+    function add(Value $value): void
     {
         $this->mem[] = $value;
     }

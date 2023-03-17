@@ -2,17 +2,17 @@
 
 namespace CompressJson\Memory;
 
-use CompressJson\Core\ValueType;
+use CompressJson\Core\Value;
 
 interface StoreInterface
 {
-    function add(ValueType $value): void;
+    function add(Value $value): void;
 
     // Type: (value: Value) => void | 'break'
     function forEach(callable $callback): void;
 
     /**
-     * @return ValueType[]
+     * @return Value[]
      */
     function toArray(): array;
 }

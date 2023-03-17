@@ -10,7 +10,6 @@ use CompressJson\Memory\InMemoryMemory;
 class Compressor
 {
     private AbstractMemory $memory;
-    private Compressed $compressed;
 
     private function __construct(AbstractMemory $memory)
     {
@@ -47,7 +46,7 @@ class Compressor
     function decompress(Compressed $compressed): string|array|bool|int|null|float
     {
         $values = array_map(
-            fn($el) => new ValueType($el),
+            fn($el) => new Value($el),
             $compressed->getValues()
         );
         $root = $compressed->getKey();

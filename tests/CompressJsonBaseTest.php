@@ -5,7 +5,7 @@ use PHPUnit\Framework\TestCase;
 
 class CompressJsonBaseTest extends TestCase
 {
-    public function testSimpleData()
+    public function testBase()
     {
         ini_set('precision', 16);
         $longStr = 'A very very long string, that is repeated';
@@ -37,6 +37,67 @@ class CompressJsonBaseTest extends TestCase
         // Assert
         $this->assertInstanceOf('CompressJson\Core\Compressed', $compressed);
         $this->assertIsString($compressedJson);
+        $this->assertEquals($data, $decompressed);
+    }
+
+    public function testDeepNestedData()
+    {
+        function getObj($id) {
+            // Current max available deep
+            // TODO make deeper
+            if ($id > 27) {
+                return null;
+            }
+            return [
+                'id' => $id,
+                'name' => 'Object',
+                'nested' => getObj($id + 1)
+            ];
+        }
+        $data = [
+            'obj' => getObj(1),
+        ];
+        $compressed = Compressor::create()
+            ->compress($data);
+        $compressedJson = $compressed
+            ->toJson();
+        $decompressed = Compressor::create()
+            ->decompressJson($compressedJson);
+        // Assert
+        $this->assertEquals($data, $decompressed);
+    }
+
+    public function testNullValue()
+    {
+        $data = [
+            'key' => null
+        ];
+        $compressed = Compressor::create()
+            ->compress($data);
+        $compressedJson = $compressed
+            ->toJson();
+        $decompressed = Compressor::create()
+            ->decompressJson($compressedJson);
+        // Assert
+        $this->assertEquals($data, $decompressed);
+    }
+
+    public function testNestedWithSameKey()
+    {
+        $data = [
+            'objects' => [
+                'objects' => [
+                    'key' => 'value'
+                ]
+            ]
+        ];
+        $compressed = Compressor::create()
+            ->compress($data);
+        $compressedJson = $compressed
+            ->toJson();
+        $decompressed = Compressor::create()
+            ->decompressJson($compressedJson);
+        // Assert
         $this->assertEquals($data, $decompressed);
     }
 }

@@ -59,7 +59,9 @@ abstract class AbstractMemory
      */
     public function getSchema(array $keys): Value
     {
-        /*if (config.sort_key) {
+        /*
+        ???
+        if (config.sort_key) {
           keys.sort()
         }*/
         $schema = implode(',', $keys);

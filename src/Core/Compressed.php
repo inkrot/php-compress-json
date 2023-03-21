@@ -53,12 +53,17 @@ class Compressed
         $this->key = $key;
     }
 
-    function toJson(int $flags = 0, int $depth = 512): string
+    function toArray(): array
     {
         $values = $this->getValues();
         $root = $this->getKey();
+        return [$values, $root];
+    }
+
+    function toJson(int $flags = 0, int $depth = 512): string
+    {
         return json_encode(
-            [$values, $root], $flags, $depth
+            $this->toArray(), $flags, $depth
         );
     }
 }

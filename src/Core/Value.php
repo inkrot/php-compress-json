@@ -34,6 +34,9 @@ class Value
     public function getStringPrefix(): string
     {
         $str = $this->value;
+        if (strlen($str) < 2) {
+            return '';
+        }
         return $str[0] . $str[1];
     }
 

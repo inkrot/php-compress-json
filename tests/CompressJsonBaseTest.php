@@ -100,4 +100,21 @@ class CompressJsonBaseTest extends TestCase
         // Assert
         $this->assertEquals($data, $decompressed);
     }
+
+    public function testShortString()
+    {
+        $data = [
+            '',
+            'p',
+            'pp'
+        ];
+        $compressed = Compressor::create()
+            ->compress($data);
+        $compressedJson = $compressed
+            ->toJson();
+        $decompressed = Compressor::create()
+            ->decompressJson($compressedJson);
+        // Assert
+        $this->assertEquals($data, $decompressed);
+    }
 }

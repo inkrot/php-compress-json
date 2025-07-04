@@ -117,4 +117,17 @@ class CompressJsonBaseTest extends TestCase
         // Assert
         $this->assertEquals($data, $decompressed);
     }
+
+    public function testSecondValueAsNumericalString()
+    {
+        //raw json
+        $rawJson = '["0","1","2","3","4","5","6","7","8","9",{"A":"h"},{"B":"c"},{"C":"E"},{"D":"b"},{"E":"L"},{"F":"S"},{"G":"C"},{"H":"G"},{"I":"L"},{"J":"I"},{"K":"R"},{"L":"l"},{"M":"6"},{"N":"I"},{"O":"k"}]';
+        //compress-json.js generated compressed json
+        $compressedJson = '[["0","1","2","3","4","5","6","7","8","9","A","a|A","h","o|B|C","B","a|E","c","o|F|G","C","a|I","E","o|J|K","D","a|M","b","o|N|O","a|K","L","o|Q|R","F","a|T","S","o|U|V","G","a|X","o|Y|I","H","a|a","o|b|X","I","a|d","o|e|R","J","a|g","o|h|d","K","a|j","R","o|k|l","a|R","l","o|n|o","M","a|q","o|r|6","N","a|t","o|u|d","O","a|w","k","o|x|y","a|0|1|2|3|4|5|6|7|8|9|D|H|L|P|S|W|Z|c|f|i|m|p|s|v|z"],"10"]';
+        $data=json_decode($rawJson,true);
+        $decompressed = Compressor::create()
+            ->decompressJson($compressedJson);
+        // Assert
+        $this->assertEquals($data, $decompressed);
+    }
 }

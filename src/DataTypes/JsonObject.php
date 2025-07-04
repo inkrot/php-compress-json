@@ -10,7 +10,7 @@ class JsonObject
 
     private static function decodeKey(string $key): int
     {
-        return is_numeric($key) ? $key : JsonNumber::s_to_int($key);
+        return is_int($key) ? $key : JsonNumber::s_to_int($key);
     }
 
     /**

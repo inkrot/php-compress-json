@@ -47,7 +47,7 @@ class Value
         }
         //$value = (string) $value;
         if ($this->isNumeric()) {
-            return $this;
+            return $this->value;
         }
         else if ($this->isString()) {
             $prefix = $this->getStringPrefix();

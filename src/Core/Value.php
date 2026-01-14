@@ -57,6 +57,7 @@ class Value
                 case 'o|':
                     return JsonObject::decodeObject($values, $this);
                 case 'n|':
+                case 'N|': // Special values (v3.2.0): INF, -INF, NAN
                     return JsonNumber::decodeNumber($this);
                 case 'a|':
                     return JsonArray::decodeArray($values, $this);

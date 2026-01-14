@@ -15,6 +15,7 @@ class JsonString
             case 'b|':
             case 'o|':
             case 'n|':
+            case 'N|': // Special values prefix (v3.2.0)
             case 'a|':
             case 's|':
                 $str = 's|' . $str;

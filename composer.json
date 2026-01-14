@@ -1,5 +1,6 @@
 {
     "name": "inkrot/php-compress-json",
+    "version": "3.2.0",
     "type": "library",
     "description": "Store JSON data in space efficient manner",
     "keywords": ["json", "compress"],

@@ -142,5 +142,94 @@ class CompressJsonBaseTest extends TestCase
             ->decompressJson($compressedJson);
         // Assert
         $this->assertSame($data, $decompressed);
+    /**
+     * Test special float values (v3.2.0 compatibility)
+     * - Infinity encoded as N|+
+     * - -Infinity encoded as N|-
+     * - NaN encoded as N|0
+     */
+    public function testSpecialValues()
+    {
+        // Test encoding/decoding special values
+        $data = [
+            'infinity' => INF,
+            'negInfinity' => -INF,
+            'nan' => NAN,
+            'regularNumber' => 42,
+            'regularFloat' => 3.14
+        ];
+
+        $compressed = Compressor::create()
+            ->compress($data);
+        $compressedJson = $compressed->toJson();
+        $decompressed = Compressor::create()
+            ->decompressJson($compressedJson);
+
+        // Assert regular values
+        $this->assertEquals($data['infinity'], $decompressed['infinity']);
+        $this->assertEquals($data['negInfinity'], $decompressed['negInfinity']);
+        $this->assertTrue(is_nan($decompressed['nan']), 'NaN should be decoded as NaN');
+        $this->assertEquals($data['regularNumber'], $decompressed['regularNumber']);
+        $this->assertEquals($data['regularFloat'], $decompressed['regularFloat']);
+    }
+
+    /**
+     * Test special values in arrays
+     */
+    public function testSpecialValuesInArray()
+    {
+        $data = [INF, -INF, NAN, 42];
+
+        $compressed = Compressor::create()
+            ->compress($data);
+        $compressedJson = $compressed->toJson();
+        $decompressed = Compressor::create()
+            ->decompressJson($compressedJson);
+
+        $this->assertEquals(INF, $decompressed[0]);
+        $this->assertEquals(-INF, $decompressed[1]);
+        $this->assertTrue(is_nan($decompressed[2]));
+        $this->assertEquals(42, $decompressed[3]);
+    }
+
+    /**
+     * Test that strings starting with N| are properly escaped
+     */
+    public function testSpecialValuePrefixEscape()
+    {
+        $data = [
+            'specialString' => 'N|+',
+            'anotherSpecial' => 'N|-',
+            'yetAnother' => 'N|0'
+        ];
+
+        $compressed = Compressor::create()
+            ->compress($data);
+        $compressedJson = $compressed->toJson();
+        $decompressed = Compressor::create()
+            ->decompressJson($compressedJson);
+
+        // Strings should be preserved, not converted to special values
+        $this->assertEquals('N|+', $decompressed['specialString']);
+        $this->assertEquals('N|-', $decompressed['anotherSpecial']);
+        $this->assertEquals('N|0', $decompressed['yetAnother']);
+    }
+
+    /**
+     * Test compatibility with JavaScript compress-json v3.2.0
+     * Decompress data compressed by JS library
+     */
+    public function testJsCompatibilitySpecialValues()
+    {
+        // This is what JavaScript compress-json v3.2.0 would produce
+        // for { infinity: Infinity, negInfinity: -Infinity, nan: NaN }
+        $jsCompressedJson = '[["infinity","negInfinity","nan","a|0|1|2","N|+","N|-","N|0","o|3|4|5|6"],"7"]';
+
+        $decompressed = Compressor::create()
+            ->decompressJson($jsCompressedJson);
+
+        $this->assertEquals(INF, $decompressed['infinity']);
+        $this->assertEquals(-INF, $decompressed['negInfinity']);
+        $this->assertTrue(is_nan($decompressed['nan']));
     }
 }

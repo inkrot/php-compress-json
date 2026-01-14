@@ -134,7 +134,7 @@ abstract class AbstractMemory
                 )
             );
         }
-        else if (is_numeric($data)) {
+        else if (is_numeric($data) || JsonNumber::isSpecialFloat($data)) {
             return $this->getValueKey(
                 new Value(
                     JsonNumber::encodeNumber($data)

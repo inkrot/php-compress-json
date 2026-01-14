@@ -18,15 +18,54 @@ class JsonNumber
     const I_TO_S = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
     const CONVERSIONS_COUNT = 62;
 
+    // Special value encodings (v3.2.0)
+    const ENCODE_INFINITY = 'N|+';
+    const ENCODE_NEG_INFINITY = 'N|-';
+    const ENCODE_NAN = 'N|0';
+
+    /**
+     * Check if value is a special float (INF, -INF, NAN)
+     */
+    public static function isSpecialFloat(mixed $value): bool
+    {
+        if (!is_float($value)) {
+            return false;
+        }
+        return is_nan($value) || is_infinite($value);
+    }
+
     // encodeNum
     public static function encodeNumber(mixed $num): string
     {
+        // Handle special values (v3.2.0)
+        if (is_float($num)) {
+            if ($num === INF) {
+                return self::ENCODE_INFINITY;
+            }
+            if ($num === -INF) {
+                return self::ENCODE_NEG_INFINITY;
+            }
+            if (is_nan($num)) {
+                return self::ENCODE_NAN;
+            }
+        }
         return 'n|' . self::num_to_s($num);
     }
 
     // decodeNum
     public static function decodeNumber(string $s): int|float
     {
+        // Handle special values (v3.2.0)
+        if ($s === self::ENCODE_INFINITY) {
+            return INF;
+        }
+        if ($s === self::ENCODE_NEG_INFINITY) {
+            return -INF;
+        }
+        if ($s === self::ENCODE_NAN) {
+            return NAN;
+        }
+
         $s = str_replace('n|', '', $s);
         return self::s_to_num($s);
     }

@@ -137,11 +137,13 @@ class CompressJsonBaseTest extends TestCase
         $rawJson = '["0"]';
         //compress-json.js generated compressed json
         $compressedJson = '[["0","a|0"],"1"]';
-        $data=json_decode($rawJson,true);
+        $data = json_decode($rawJson, true);
         $decompressed = Compressor::create()
             ->decompressJson($compressedJson);
         // Assert
         $this->assertSame($data, $decompressed);
+    }
+
     /**
      * Test special float values (v3.2.0 compatibility)
      * - Infinity encoded as N|+
